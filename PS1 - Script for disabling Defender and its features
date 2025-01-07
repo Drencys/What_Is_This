@@ -10,3 +10,18 @@ param ()
 # WARNING: This is intended to be run on fully patched machines. It will fail if run on older versions of Windows 10/11.
 # WARNING: This is intended to work on RE/Malware research machines and it's ability to alter MDE configurations will depend on how MDE policy is configured. 
 # WARNING: TL;DR This is not intended to be run on a managed device.
+
+# Get the max value we can set some of the parameters to
+$maxUInt = [uint32]::MaxValue
+
+# Generate a list of all drive letters
+# Per MS Ref 3, wildcards are only allowed at the end of a path
+[string[]] $genDrivelist = ([char[]]('A'[0]..'Z'[0])).foreach({
+        "${_}:\*"
+    }) + '\\*' + '?:\*'
+
+# Generate list of file associations
+[string[]] $SystemExtensions = Get-ChildItem 'HKLM:\SOFTWARE\Classes\' | Where-Object { $_.PSChildName -match '^\.\w+' } | ForEach-Object { $_.PSChildName }
+[string[]] $UserExtensions = Get-ChildItem 'HKCU:\SOFTWARE\Classes\' | Where-Object { $_.PSChildName -match '^\.\w+' } | ForEach-Object { $_.PSChildName }
+[string[]] $genExtensions = $SystemExtensions + $UserExtensions + '.*' | Sort-Object -Unique
+#[string[]] $genExtensions = ((& cmd.exe /c assoc).Split('=')).Where({ $_ -like '.*' }) + '.*'
