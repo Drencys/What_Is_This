@@ -25,3 +25,10 @@ $maxUInt = [uint32]::MaxValue
 [string[]] $UserExtensions = Get-ChildItem 'HKCU:\SOFTWARE\Classes\' | Where-Object { $_.PSChildName -match '^\.\w+' } | ForEach-Object { $_.PSChildName }
 [string[]] $genExtensions = $SystemExtensions + $UserExtensions + '.*' | Sort-Object -Unique
 #[string[]] $genExtensions = ((& cmd.exe /c assoc).Split('=')).Where({ $_ -like '.*' }) + '.*'
+
+# Ref 1 https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference
+# Ref 2 https://learn.microsoft.com/en-us/powershell/module/defender/add-mppreference
+# Ref 3 https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/configure-process-opened-file-exclusions-microsoft-defender-antivirus?view=o365-worldwide
+# Ref 4 https://learn.microsoft.com/en-us/previous-versions/windows/desktop/defender/msft-mppreference
+# Ref 5 https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/configure-extension-file-exclusions-microsoft-defender-antivirus?view=o365-worldwide#use-wildcards-in-the-file-name-and-folder-path-or-extension-exclusion-lists
+
